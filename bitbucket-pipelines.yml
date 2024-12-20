@@ -1,0 +1,49 @@
+image: atlassian/default-image:3
+
+pipelines:
+  branches:
+    dev:
+      - step:
+          name: Install and Build
+          caches:
+            - node
+          script:
+            - echo "Installing dependencies..."
+            - npm install
+            - echo "Building the React app..."
+            - CI=false npm run build || { cat /root/.npm/_logs/*.log; exit 1; }
+            - pwd
+            - ls -al
+            - echo "Build complete"
+            - echo "Checking if build directory exists..."
+            - if [ ! -d "build" ]; then echo "Build failed, directory not found!"; exit 1; fi
+            - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+            - eval $(ssh-agent -s)
+            - echo $DEV_SSH_KEY | base64 --decode | ssh-add -
+            - mkdir -p ~/.ssh
+            - chmod 700 ~/.ssh
+            - ssh-keyscan -H $DEV_SERVER >> ~/.ssh/known_hosts
+            - echo "Deploying to the development server"
+            - echo "$DEV_SERVER"
+            - echo "Listing build directory contents..."
+            - scp -r build/* ubuntu@$DEV_SERVER:/home/ubuntu/erp_web
+            - echo "Build files upload successfully!"
+            - ssh ubuntu@$DEV_SERVER "cd /home/ubuntu/erp_web && ls "
+
+            # PM2 steps to manage the app
+            - echo "Stopping previous PM2 process..."
+            - ssh ubuntu@$DEV_SERVER "/usr/local/bin/pm2 stop 'erp-web' || true"
+            - echo "Deleting previous PM2 process..."
+            - ssh ubuntu@$DEV_SERVER "/usr/local/bin/pm2 delete 'erp-web' || true"
+
+            # Installing serve and starting the app using PM2
+           # Use 'npx' to run 'serve' locally
+            - echo "Starting the app with PM2 using 'npx serve'..."
+            - ssh ubuntu@$DEV_SERVER "cd /home/ubuntu/erp_web && /usr/local/bin/pm2 start 'npx serve ./ -l 4000 --single' --name 'erp-web'"
+
+            # Optional: Save PM2 process list and enable startup on reboot
+            - echo "Displaying PM2 process list..."
+            - ssh ubuntu@$DEV_SERVER "/usr/local/bin/pm2 list"
+            - echo "Deployment to dev server complete!"
+            - echo "Deployment Success!!"
+

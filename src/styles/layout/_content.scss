@@ -1,0 +1,20 @@
+.layout-main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+    padding: 5rem 0rem 2rem 0rem;
+    transition: margin-left $transitionDuration;
+    background-color: var(--surface-a);
+}
+
+.layout-main {
+    flex: 1 1 auto;
+    // padding: 2rem;
+}
+
+.layout-main-pad {
+    padding-top: 0rem;
+    // padding-right: 0rem;
+    // background-color: #f9faff;
+}
