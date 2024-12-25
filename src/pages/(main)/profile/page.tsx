@@ -1,6 +1,3 @@
-
-
-
 import { Avatar } from 'primereact/avatar';
 import React, { useContext, useState, useEffect } from 'react';
 import { Button } from 'primereact/button';
@@ -26,7 +23,6 @@ const UserProfilePage = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [user, setUser] = useState<any>(null);
 
-
     useEffect(() => {
         fetchData();
         setScroll(false);
@@ -39,15 +35,14 @@ const UserProfilePage = () => {
     const [tableData1, setTableData1] = useState([
         { label: 'Display Name', value: '' },
         { label: 'First Name', value: '' },
-        { label: 'Email', value: '' },
+        { label: 'Email', value: '' }
     ]);
 
     const [tableData2, setTableData2] = useState([
         { label: 'Role Name', value: '' },
         { label: 'Last Name', value: '' },
-        { label: 'Phone', value: '' },
+        { label: 'Phone', value: '' }
     ]);
-
 
     const fetchData = async () => {
         setLoading(true);
@@ -60,18 +55,14 @@ const UserProfilePage = () => {
             setTableData1([
                 { label: 'Display Name', value: user.displayName },
                 { label: 'First Name', value: user.firstName || 'N/A' },
-                { label: 'Email', value: user.email || 'N/A' },
+                { label: 'Email', value: user.email || 'N/A' }
             ]);
 
             setTableData2([
                 { label: 'Role Name', value: user.userRole },
                 { label: 'Last Name', value: user.lastName || 'N/A' },
-                { label: 'Phone', value: user.phone || 'N/A' },
+                { label: 'Phone', value: user.phone || 'N/A' }
             ]);
-
-
-
-
         } else {
             setUser([]);
         }
@@ -109,8 +100,7 @@ const UserProfilePage = () => {
         if (hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar && password.length >= 8) {
             setNewPassword(event.target.value);
         } else {
-
-            setAlert('error', "Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long.");
+            setAlert('error', 'Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long.');
         }
     };
 
@@ -138,13 +128,9 @@ const UserProfilePage = () => {
         }
     };
 
-    const containerClassName = classNames(
-        'surface-ground flex align-items-center justify-content-center min-h-screen  overflow-hidden',
-        {
-            'p-input-filled': layoutConfig.inputStyle === 'filled',
-
-        }
-    );
+    const containerClassName = classNames('surface-ground flex align-items-center justify-content-center min-h-screen  overflow-hidden', {
+        'p-input-filled': layoutConfig.inputStyle === 'filled'
+    });
 
     const openNew = () => {
         setPanelVisible(true);
@@ -159,7 +145,7 @@ const UserProfilePage = () => {
         return (
             <div className={className}>
                 <div className="flex align-items-center ">
-                    <p className='sub-heading'>Change Password</p>
+                    <p className="sub-heading">Change Password</p>
                 </div>
             </div>
         );
@@ -181,7 +167,7 @@ const UserProfilePage = () => {
                         <div className="left-panel">
                             <div className="flex justify-content-between p-4">
                                 <span className="p-input-icon-left flex align-items-center">
-                                    <h4 className='mb-0'>Profile</h4>
+                                    <h4 className="mb-0">Profile</h4>
                                 </span>
                             </div>
                             <div className="flex items-center gap-4 p-4">
@@ -195,7 +181,7 @@ const UserProfilePage = () => {
                             <div className="w-full p-4 bg-white shadow-lg rounded-lg border border-gray-200">
                                 <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center mb-6">
                                     <h5 className="m-0 text-lg font-semibold">About Me</h5>
-                                    <div className='flex gap-5'>
+                                    <div className="flex gap-5">
                                         <span className="block mt-2 md:mt-0 p-input-icon-left">
                                             <Button label="Change Password" severity="secondary" onClick={openNew} />
                                         </span>
@@ -223,45 +209,47 @@ const UserProfilePage = () => {
                         footerTemplate={panelFooterTemplate}
                         closeIcon={closeIcon}
                         width={'30vw'}
-                        content={<div>
-                            <label htmlFor="oldPassword" className="block text-900 font-medium mb-2">Old Password</label>
-                            <InputText
-                                id="oldPassword"
-                                type="password"  // Correct type
-                                placeholder="Old password"
-                                className="w-full mb-3"
-                                value={oldPassword}
-                                onChange={handleOldPasswordChange}
-                            />
+                        content={
+                            <div>
+                                <label htmlFor="oldPassword" className="block text-900 font-medium mb-2">
+                                    Old Password
+                                </label>
+                                <InputText
+                                    id="oldPassword"
+                                    type="password" // Correct type
+                                    placeholder="Old password"
+                                    className="w-full mb-3"
+                                    value={oldPassword}
+                                    onChange={handleOldPasswordChange}
+                                />
 
-                            <label htmlFor="newPassword" className="block text-900 font-medium mb-2">New Password</label>
-                            <InputText
-                                id="newPassword"
-                                type="password"  // Correct type
-                                placeholder="New password"
-                                className="w-full mb-3"
-                                value={newPassword}
-                                onChange={handleNewPasswordChange}
-                            />
+                                <label htmlFor="newPassword" className="block text-900 font-medium mb-2">
+                                    New Password
+                                </label>
+                                <InputText
+                                    id="newPassword"
+                                    type="password" // Correct type
+                                    placeholder="New password"
+                                    className="w-full mb-3"
+                                    value={newPassword}
+                                    onChange={handleNewPasswordChange}
+                                />
 
-                            <label htmlFor="confPassword" className="block text-900 font-medium mb-2">Confirm Password</label>
-                            <InputText
-                                id="confPassword"
-                                type="password"  // Ensure type is set to "password"
-                                placeholder="Confirm password"
-                                className="w-full mb-3"
-                                value={confpassword}
-                                onChange={handleConfPasswordChange}
-                            />
+                                <label htmlFor="confPassword" className="block text-900 font-medium mb-2">
+                                    Confirm Password
+                                </label>
+                                <InputText
+                                    id="confPassword"
+                                    type="password" // Ensure type is set to "password"
+                                    placeholder="Confirm password"
+                                    className="w-full mb-3"
+                                    value={confpassword}
+                                    onChange={handleConfPasswordChange}
+                                />
 
-
-                            <Button
-                                label="Update password"
-                                icon={isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-user'}
-                                className="w-full"
-                                onClick={updatePasswordClick}
-                            />
-                        </div>}
+                                <Button label="Update password" icon={isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-user'} className="w-full" onClick={updatePasswordClick} />
+                            </div>
+                        }
                     />
                 </div>
             </div>

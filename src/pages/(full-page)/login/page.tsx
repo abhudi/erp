@@ -13,8 +13,8 @@ import { LayoutContext } from '../../../layout/context/layoutcontext';
 
 const LoginPage = () => {
     const { isLoading, setAlert, setLoading, setUser, setAuthToken, setDisplayName } = useAppContext();
-    const [email, setEmail] = useState('sky@gmail.com');
-    const [password, setPassword] = useState('erp3001');
+    const [userEmail, setEmail] = useState('reckitt@gmail.com');
+    const [userPassword, setPassword] = useState('reckitt@123');
     const [checked, setChecked] = useState(false);
     const { layoutConfig, layoutState } = useContext(LayoutContext);
 
@@ -37,23 +37,23 @@ const LoginPage = () => {
             return;
         }
 
-        if (email && password) {
+        if (userEmail && userPassword) {
             setLoading(true);
-            const resoponse: any = await PostCall('/auth/sign-in', { email, password });
+            const response: any = await PostCall('/auth/sign-in', { userEmail, userPassword });
             setLoading(false);
-            if (resoponse.code == 'SUCCESS') {
+            if (response.code == 'SUCCESS') {
                 console.log('login success');
                 setAlert('success', 'Login success!!');
-                setUser(resoponse.data);
-                setAuthToken(resoponse.token);
-                setAuthData(resoponse.token, resoponse.refreshToken, resoponse.data);
-            } else if (resoponse.code == 'RESET_PASSWORD') {
-                console.log('res', resoponse);
-                setDisplayName(resoponse.name);
+                setUser(response.data);
+                setAuthToken(response.token);
+                setAuthData(response.token, response.refreshToken, response.data);
+            } else if (response.code == 'RESET_PASSWORD') {
+                console.log('res', response);
+                setDisplayName(response.name);
                 setAlert('success', 'Please reset you password');
-                navigate(`/reset-password?resetToken=${resoponse.resetToken}`);
+                navigate(`/reset-password?resetToken=${response.resetToken}`);
             } else {
-                setAlert('error', resoponse.message);
+                setAlert('error', response.message);
             }
         }
     };
@@ -62,24 +62,34 @@ const LoginPage = () => {
     return (
         <div className={containerClassName}>
             <div className="flex align-items-center justify-between w-full h-screen">
+                {/* Left side image (hidden on small devices) */}
                 <div className="img-box hidden md:flex justify-content-center align-items-center w-1/2 h-full">
                     <img src="/images/login.svg" alt="Login" className="w-full h-full object-cover" />
                 </div>
 
-                <div>
-                    <div className="surface-card p-4 shadow-2 border-round w-full" style={{ minWidth: layoutState.isMobile ? 0 : 400 }}>
+                {/* Right side form with huge space between */}
+                <div className="">
+                    <div
+                        className={`surface-card p-4 shadow-2 border-round ${layoutState.isMobile ? 'w-full h-auto p-5' : 'w-1/2'}`}
+                        style={{
+                            minWidth: layoutState.isMobile ? '100%' : '400px',
+                            margin: layoutState.isMobile ? 'auto' : 'unset',
+                            marginLeft: layoutState.isMobile ? '0' : 'calc(10% + 8rem)' // Dynamic margin based on screen size
+                        }}
+                    >
+                        <div className="logo-login-panel text-center mb-5">
+                            <img src="/images/reckitt.webp" alt="Logo" width="120px" height={'50px'} />
+                        </div>
                         <div className="text-center mb-5">
-                            {/* <img src="/images/301io.png" alt="hyper" height={50} className="mb-3" /> */}
                             <div className="text-900 text-3xl font-medium mb-3">Welcome Back</div>
-                            {/* <span className="text-600 font-medium line-height-3">Don't have an account?</span> */}
-                            {/* <a className="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</a> */}
+                            <span className="text-600 font-medium line-height-3">Enter your credentials to access your account</span>
                         </div>
 
                         <div>
                             <label htmlFor="userEmail" className="block text-900 font-medium mb-2">
                                 Email Address
                             </label>
-                            <InputText id="userEmail" value={email} type="text" placeholder="Email address" className="w-full mb-3" onChange={handleEmail} />
+                            <InputText id="userEmail" value={userEmail} type="text" placeholder="Email address" className="w-full mb-3" onChange={handleEmail} />
 
                             <div className="flex align-items-center justify-content-between mb-2">
                                 <div className="flex align-items-center">
@@ -91,7 +101,7 @@ const LoginPage = () => {
                                     Forgot your userPassword?
                                 </Link>
                             </div>
-                            <InputText id="userPassword" value={password} type="userPassword" placeholder="Password" className="w-full mb-3" onChange={handlePassword} />
+                            <InputText id="userPassword" value={userPassword} type="userPassword" placeholder="Password" className="w-full mb-3" onChange={handlePassword} />
 
                             <div className="flex flex-wrap justify-content-left gap-3 mb-2">
                                 <div className="flex align-items-center mb-2">
@@ -110,7 +120,7 @@ const LoginPage = () => {
                                 </div>
                             </div>
 
-                            <Button label="Login" icon={isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-user'} className="w-full" onClick={loginClick} />
+                            <Button label="Login" icon={isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-user'} className="w-full bg-pink-500 border-pink-500 mb-2" onClick={loginClick} />
 
                             <div className="flex align-items-center justify-content-center mb-6 mt-3 ">
                                 <Link to="/forgot-userPassword" className="font-medium no-underline ml-2  text-center cursor-pointer">

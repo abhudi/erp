@@ -12,30 +12,30 @@ let axiosRef: string | null = null;
 
 const defaultContext: AppContextType = {
     displayName: '',
-    setDisplayName: () => { },
+    setDisplayName: () => {},
     user: null,
-    setUser: () => { },
+    setUser: () => {},
     company: null,
-    setCompany: () => { },
+    setCompany: () => {},
     isLoading: true,
-    setLoading: () => { },
-    signOut: () => { },
-    setAlert: () => { },
+    setLoading: () => {},
+    signOut: () => {},
+    setAlert: () => {},
     authToken: null,
-    setAuthToken: () => { },
+    setAuthToken: () => {},
     isScroll: true,
-    setScroll: () => { },
+    setScroll: () => {},
     selectedSubLocation: null,
-    setSelectedSubLocation: () => { }
+    setSelectedSubLocation: () => {}
 };
 const AppContext = createContext(defaultContext);
 
 const authRoutes = ['/login', '/reset-password', '/forgot-password'];
 
 export const AppWrapper = React.memo(({ children }: any) => {
-    const location = useLocation()
+    const location = useLocation();
     const [searchParams] = useSearchParams();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [displayName, setDisplayName] = useState('');
     const [authToken, setAuthToken] = useState(getAuthToken());
     const [user, setUser] = useState(null);
@@ -53,94 +53,87 @@ export const AppWrapper = React.memo(({ children }: any) => {
             if (authRoutes.includes(location.pathname)) {
                 return;
             }
-            const returnUrl = `${location.pathname}?${searchParams.toString()}`
+            const returnUrl = `${location.pathname}?${searchParams.toString()}`;
             navigate(`/login?returnUrl=${returnUrl}`);
-        }
-        else if (authToken && isValid && authRoutes.includes(location.pathname)) {
+        } else if (authToken && isValid && authRoutes.includes(location.pathname)) {
             const returnUrl = searchParams.get('returnUrl') || '/';
             const newDomain = get(isValid, 'portalLink', window.location.host);
             window.location.href = `${newDomain}${returnUrl}`;
         }
-    }, [authToken])
+    }, [authToken]);
     useEffect(() => {
         setLoading(true);
         const userToken: string = getAuthToken();
         if (userToken) {
             setLoading(false);
             if (!isTokenValid(userToken)) {
-                signOut()
+                signOut();
                 return;
             }
-        }
-        else {
+        } else {
             setLoading(false);
         }
 
         const userData = getUserDetails();
         if (userData) {
             try {
-                setUser(userData)
-            } catch (error) {
-
-            }
+                setUser(userData);
+            } catch (error) {}
 
             if (userData && userData.company) {
                 try {
-                    setCompany(userData.company)
-                } catch (error) {
-
-                }
+                    setCompany(userData.company);
+                } catch (error) {}
             }
         }
-        fetchData()
+        // fetchData()
 
         eventEmitter.on('signOut', (data: any) => {
             console.log('Event received:');
             removeAuthData();
             signOut();
-            setAlert('info', 'Session expired')
+            setAlert('info', 'Session expired');
         });
-
-    }, [])
-
-    const fetchData = useCallback(async () => {
-        const token = getAuthToken();
-        const isValid = isTokenValid(token);
-        if (!axiosRef && isValid) {
-            axiosRef = 'ref';
-            const result: CustomResponse = await GetCall('/auth/profile');
-            axiosRef = null
-            if (result.code == 'SUCCESS') {
-                setUser(result.data);
-                setCompany(result.data.company)
-                setUserDetails(result.data);
-            }
-            else if (result.code == 'AUTH_FAILED') {
-                setUser(null)
-                if (token) {
-                    setAlert('error', 'Session expired')
-                }
-            }
-            else {
-                if (token) {
-                    setAlert('error', result.message)
-                }
-            }
-        }
-        else if (!isValid) {
-            if (token) {
-                removeAuthData();
-                setAlert('error', 'Session expired')
-            }
-        }
     }, []);
+
+    // const fetchData = useCallback(async () => {
+    //     const token = getAuthToken();
+    //     const isValid = isTokenValid(token);
+    //     if (!axiosRef && isValid) {
+    //         axiosRef = 'ref';
+    //         const result: CustomResponse = await GetCall('/auth/profile');
+    //         axiosRef = null
+    //         if (result.code == 'SUCCESS') {
+    //             setUser(result.data);
+    //             setCompany(result.data.company)
+    //             setUserDetails(result.data);
+    //         }
+    //         else if (result.code == 'AUTH_FAILED') {
+    //             setUser(null)
+    //             if (token) {
+    //                 setAlert('error', 'Session expired')
+    //             }
+    //         }
+    //         else {
+    //             if (token) {
+    //                 setAlert('error', result.message)
+    //             }
+    //         }
+    //     }
+    //     else if (!isValid) {
+    //         if (token) {
+    //             removeAuthData();
+    //             setAlert('error', 'Session expired')
+    //         }
+    //     }
+    // }, []);
 
     const signOut = async () => {
         await removeAuthData();
-        setUser(null)
-        const returnUrl = `${location.pathname}?${searchParams.toString()}`
+        setUser(null);
+        const returnUrl = `${location.pathname}?${searchParams.toString()}`;
         navigate(`/login?returnUrl=${returnUrl}`, undefined);
-    }
+    };
 
     const setAlert = (type: string, message: string) => {
         if (toastRef.current) {
@@ -148,30 +141,35 @@ export const AppWrapper = React.memo(({ children }: any) => {
         }
 
         toastRef.current.show({ severity: type, summary: type.toUpperCase(), detail: message, life: 3000 });
-    }
+    };
 
     return (
-        <AppContext.Provider value={{
-            displayName,
-            setDisplayName,
-            user, setUser,
-            company, setCompany,
-            authToken, setAuthToken,
-            isLoading, setLoading,
-            signOut,
-            setAlert,
-            isScroll,
-            setScroll,
-            selectedSubLocation, setSelectedSubLocation
-        }}>
-            <Toast className='erp-alert' ref={toastRef} />
-            {isLoading && <div className='running-border'></div>}
-            <div style={{ overflow: isScroll ? 'auto' : 'hidden', maxHeight: '100vh' }}>
-                {children}
-            </div>
+        <AppContext.Provider
+            value={{
+                displayName,
+                setDisplayName,
+                user,
+                setUser,
+                company,
+                setCompany,
+                authToken,
+                setAuthToken,
+                isLoading,
+                setLoading,
+                signOut,
+                setAlert,
+                isScroll,
+                setScroll,
+                selectedSubLocation,
+                setSelectedSubLocation
+            }}
+        >
+            <Toast className="erp-alert" ref={toastRef} />
+            {isLoading && <div className="running-border"></div>}
+            <div style={{ overflow: isScroll ? 'auto' : 'hidden', maxHeight: '100vh' }}>{children}</div>
         </AppContext.Provider>
     );
-})
+});
 
 export function useAppContext() {
     return useContext(AppContext);

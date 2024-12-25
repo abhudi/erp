@@ -58,9 +58,8 @@ const AppMenu = () => {
                     command: handleMenuClick
                 },
                 {
-                    label: 'Companies',
-                    icon: 'pi pi-building',
-                    url: '/companies',
+                    label: 'Guidlines & Glossary',
+                    icon: 'pi pi-sliders-v',
                     check: (user: any) => {
                         const checkComm = intersection(COMPANIES_MENU, get(user, 'permissions', []));
                         if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
@@ -68,22 +67,10 @@ const AppMenu = () => {
                         }
                         return false;
                     },
-                    command: handleMenuClick
-                },
-                {
-                    label: 'Permissions',
-                    icon: 'pi pi-lock',
-                    check: (user: any) => {
-                        const checkComm = intersection([...PERMISSION_MENU, ...ROUTE_MENU], get(user, 'permissions', []));
-                        if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
-                            return true;
-                        }
-                        return false;
-                    },
                     items: [
                         {
-                            label: 'Routes',
-                            url: '/routes',
+                            label: 'FAQs',
+                            url: '/faq',
                             check: (user: any) => {
                                 const checkComm = intersection(ROUTE_MENU, get(user, 'permissions', []));
                                 if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
@@ -94,8 +81,8 @@ const AppMenu = () => {
                             command: handleMenuClick
                         },
                         {
-                            label: 'Permissions',
-                            url: '/permissions',
+                            label: 'Supply Glossary',
+                            url: '/supply-glossary',
                             check: (user: any) => {
                                 const checkComm = intersection(PERMISSION_MENU, get(user, 'permissions', []));
                                 if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
@@ -108,21 +95,21 @@ const AppMenu = () => {
                     ]
                 },
                 {
-                    label: 'Purchase',
-                    icon: 'pi pi-shopping-bag',
+                    label: 'Suppliers',
+                    icon: 'pi pi-truck',
                     check: (user: any) => {
-                        const checkComm = intersection(SUPPLIER_MENU, get(user, 'permissions', []));
-                        if (!get(user, 'isSuperAdmin') && checkComm.length > 0) {
+                        const checkComm = intersection([...PERMISSION_MENU, ...ROUTE_MENU], get(user, 'permissions', []));
+                        if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
                             return true;
                         }
                         return false;
                     },
                     items: [
                         {
-                            label: 'Vendors',
-                            url: '/vendors',
+                            label: 'Manage Suppliers',
+                            url: '/manage-supplier',
                             check: (user: any) => {
-                                const checkComm = intersection(SUPPLIER_CATELOGUE_MENU, get(user, 'permissions', []));
+                                const checkComm = intersection(ROUTE_MENU, get(user, 'permissions', []));
                                 if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
                                     return true;
                                 }
@@ -131,35 +118,11 @@ const AppMenu = () => {
                             command: handleMenuClick
                         },
                         {
-                            label: 'Purchase Order',
-                            url: '/purchase-order',
+                            label: 'Create Supplier',
+                            url: '/create-supplier',
                             check: (user: any) => {
-                                const checkComm = intersection(SUPPLIER_WAREHOUSE_MENU, get(user, 'permissions', []));
+                                const checkComm = intersection(PERMISSION_MENU, get(user, 'permissions', []));
                                 if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
-                                    return true;
-                                }
-                                return false;
-                            },
-                            command: handleMenuClick
-                        },
-                        {
-                            label: 'Pallet Receiving',
-                            url: '/pallet-receiving',
-                            check: (user: any) => {
-                                const checkComm = intersection(INVENTORY_WAREHOUSE_MENU, get(user, 'permissions', []));
-                                if (!get(user, 'isSuperAdmin') && checkComm.length > 0) {
-                                    return true;
-                                }
-                                return false;
-                            },
-                            command: handleMenuClick
-                        },
-                        {
-                            label: 'Receive Purchase Order',
-                            url: '/receive-purchase-order',
-                            check: (user: any) => {
-                                const checkComm = intersection(INVENTORY_WAREHOUSE_MENU, get(user, 'permissions', []));
-                                if (!get(user, 'isSuperAdmin') && checkComm.length > 0) {
                                     return true;
                                 }
                                 return false;
@@ -169,8 +132,33 @@ const AppMenu = () => {
                     ]
                 },
                 {
-                    label: 'Sales',
-                    icon: 'pi pi-shopping-cart',
+                    label: 'Supplier Score',
+                    icon: 'pi pi-wifi',
+                    check: (user: any) => {
+                        const checkComm = intersection(SUPPLIER_MENU, get(user, 'permissions', []));
+                        if (!get(user, 'isSuperAdmin') && checkComm.length > 0) {
+                            return true;
+                        }
+                        return false;
+                    },
+                    items: [
+                        {
+                            label: 'Manage Supplier Score',
+                            url: '/manage-supplier-score',
+                            check: (user: any) => {
+                                const checkComm = intersection(SUPPLIER_CATELOGUE_MENU, get(user, 'permissions', []));
+                                if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
+                                    return true;
+                                }
+                                return false;
+                            },
+                            command: handleMenuClick
+                        }
+                    ]
+                },
+                {
+                    label: 'Rules Manager',
+                    icon: 'pi pi-sitemap',
                     check: (user: any) => {
                         const checkComm = intersection(SALES_MENU, get(user, 'permissions', []));
                         if (!get(user, 'isSuperAdmin') && checkComm.length > 0) {
@@ -180,8 +168,8 @@ const AppMenu = () => {
                     },
                     items: [
                         {
-                            label: 'Customers',
-                            url: '/customers',
+                            label: 'Manage Rule',
+                            url: '/manage-rules',
                             check: (user: any) => {
                                 const checkComm = intersection(SALES_CUSTOMER_MENU, get(user, 'permissions', []));
                                 if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
@@ -192,56 +180,8 @@ const AppMenu = () => {
                             command: handleMenuClick
                         },
                         {
-                            label: 'Estimates',
-                            url: '/estimates',
-                            check: (user: any) => {
-                                const checkComm = intersection(SALES_ORDER_MENU, get(user, 'permissions', []));
-                                if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
-                                    return true;
-                                }
-                                return false;
-                            },
-                            command: handleMenuClick
-                        },
-                        {
-                            label: 'Sales Orders',
-                            url: '/sales-orders',
-                            check: (user: any) => {
-                                const checkComm = intersection(SALES_ORDER_MENU, get(user, 'permissions', []));
-                                if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
-                                    return true;
-                                }
-                                return false;
-                            },
-                            command: handleMenuClick
-                        },
-                        {
-                            label: 'Packages',
-                            url: '/packages',
-                            check: (user: any) => {
-                                const checkComm = intersection(SALES_ORDER_MENU, get(user, 'permissions', []));
-                                if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
-                                    return true;
-                                }
-                                return false;
-                            },
-                            command: handleMenuClick
-                        },
-                        {
-                            label: 'Shipments',
-                            url: '/shipments',
-                            check: (user: any) => {
-                                const checkComm = intersection(SALES_ORDER_MENU, get(user, 'permissions', []));
-                                if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
-                                    return true;
-                                }
-                                return false;
-                            },
-                            command: handleMenuClick
-                        },
-                        {
-                            label: 'Object Inquiry',
-                            url: '/object-inquiry',
+                            label: 'Manage CAPA Rule',
+                            url: '/manage-capa-rules',
                             check: (user: any) => {
                                 const checkComm = intersection(SALES_ORDER_MENU, get(user, 'permissions', []));
                                 if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
@@ -254,8 +194,8 @@ const AppMenu = () => {
                     ]
                 },
                 {
-                    label: 'Control Tower',
-                    icon: 'pi pi-desktop',
+                    label: 'Users Manager',
+                    icon: 'pi pi-users',
                     check: (user: any) => {
                         const checkComm = intersection(COMPANY_MENU, get(user, 'permissions', []));
                         if (checkComm.length > 0) {
@@ -265,8 +205,8 @@ const AppMenu = () => {
                     },
                     items: [
                         {
-                            label: 'Users',
-                            url: '/users',
+                            label: 'Manage Users',
+                            url: '/manage-users',
                             check: (user: any) => {
                                 const checkComm = intersection(COMPANY_USER_MENU, get(user, 'permissions', []));
                                 if (!get(user, 'isSuperAdmin') && checkComm.length > 0) {
@@ -277,8 +217,8 @@ const AppMenu = () => {
                             command: handleMenuClick
                         },
                         {
-                            label: 'Roles',
-                            url: '/roles',
+                            label: 'Create New Rules',
+                            url: '/create-new-rules',
                             check: (user: any) => {
                                 const checkComm = intersection(COMPANY_ROLE_MENU, get(user, 'permissions', []));
                                 if (!get(user, 'isSuperAdmin') && checkComm.length > 0) {
@@ -287,109 +227,26 @@ const AppMenu = () => {
                                 return false;
                             },
                             command: handleMenuClick
-                        },
+                        }
+                    ]
+                },
+                {
+                    label: "Api's Management",
+                    icon: 'pi pi-paperclip',
+                    check: (user: any) => {
+                        const checkComm = intersection(COMPANY_MENU, get(user, 'permissions', []));
+                        if (checkComm.length > 0) {
+                            return true;
+                        }
+                        return false;
+                    },
+                    items: [
                         {
-                            label: 'Sub Locations',
-                            url: '/sub-location',
+                            label: "Manage Api's",
+                            url: '/manage-users',
                             check: (user: any) => {
-                                const checkComm = intersection(INVENTORY_WAREHOUSE_MENU, get(user, 'permissions', []));
+                                const checkComm = intersection(COMPANY_USER_MENU, get(user, 'permissions', []));
                                 if (!get(user, 'isSuperAdmin') && checkComm.length > 0) {
-                                    return true;
-                                }
-                                return false;
-                            },
-                            command: handleMenuClick
-                        },
-                        {
-                            label: 'Location',
-                            url: '/warehouses',
-                            check: (user: any) => {
-                                const checkComm = intersection(INVENTORY_WAREHOUSE_MENU, get(user, 'permissions', []));
-                                if (!get(user, 'isSuperAdmin') && checkComm.length > 0) {
-                                    return true;
-                                }
-                                return false;
-                            },
-                            command: handleMenuClick
-                        },
-                        {
-                            label: 'Master Codes',
-                            url: '/master-codes',
-                            check: (user: any) => {
-                                const checkComm = intersection(COMPANY_MASTER_CODE_MENU, get(user, 'permissions', []));
-                                if (get(user, 'isAdmin') || checkComm.length > 0) {
-                                    return true;
-                                }
-                                return false;
-                            },
-                            command: handleMenuClick
-                        },
-                        {
-                            label: 'Category',
-                            url: '/categories',
-                            check: (user: any) => {
-                                const checkComm = intersection(INVENTORY_CATEGORY_MENU, get(user, 'permissions', []));
-                                if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
-                                    return true;
-                                }
-                                return false;
-                            },
-                            command: handleMenuClick
-                        },
-                        {
-                            label: 'Category Mapping',
-                            url: '/product-mapping',
-                            check: (user: any) => {
-                                const checkComm = intersection(COMPANY_MASTER_CODE_MENU, get(user, 'permissions', []));
-                                if (get(user, 'isAdmin') || checkComm.length > 0) {
-                                    return true;
-                                }
-                                return false;
-                            },
-                            command: handleMenuClick
-                        },
-                        {
-                            label: 'Racks',
-                            url: '/racks',
-                            check: (user: any) => {
-                                const checkComm = intersection(INVENTORY_RACK_MENU, get(user, 'permissions', []));
-                                if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
-                                    return true;
-                                }
-                                return false;
-                            },
-                            command: handleMenuClick
-                        },
-                        {
-                            label: 'Bins',
-                            url: '/bins',
-                            check: (user: any) => {
-                                const checkComm = intersection(INVENTORY_BIN_MENU, get(user, 'permissions', []));
-                                if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
-                                    return true;
-                                }
-                                return false;
-                            },
-                            command: handleMenuClick
-                        },
-                        // {
-                        //     label: 'SKU',
-                        //     url: '/sku',
-                        //     check: (user: any) => {
-                        //         const checkComm = intersection(INVENTORY_BIN_MENU, get(user, 'permissions', []));
-                        //         if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
-                        //             return true;
-                        //         }
-                        //         return false;
-                        //     },
-                        //     command: handleMenuClick
-                        // },
-                        {
-                            label: 'SKU List',
-                            url: '/sku-list',
-                            check: (user: any) => {
-                                const checkComm = intersection(INVENTORY_BIN_MENU, get(user, 'permissions', []));
-                                if (get(user, 'isSuperAdmin') || checkComm.length > 0) {
                                     return true;
                                 }
                                 return false;
@@ -397,6 +254,81 @@ const AppMenu = () => {
                             command: handleMenuClick
                         }
                     ]
+                },
+                {
+                    label: 'Request Management',
+                    icon: 'pi pi-bolt',
+                    check: (user: any) => {
+                        const checkComm = intersection(COMPANY_MENU, get(user, 'permissions', []));
+                        if (checkComm.length > 0) {
+                            return true;
+                        }
+                        return false;
+                    },
+                    items: [
+                        {
+                            label: 'Manage Request',
+                            url: '/manage-requests',
+                            check: (user: any) => {
+                                const checkComm = intersection(COMPANY_USER_MENU, get(user, 'permissions', []));
+                                if (!get(user, 'isSuperAdmin') && checkComm.length > 0) {
+                                    return true;
+                                }
+                                return false;
+                            },
+                            command: handleMenuClick
+                        }
+                    ]
+                },
+                {
+                    label: 'Supplier Feedback',
+                    icon: 'pi pi-gift',
+                    check: (user: any) => {
+                        const checkComm = intersection(COMPANY_MENU, get(user, 'permissions', []));
+                        if (checkComm.length > 0) {
+                            return true;
+                        }
+                        return false;
+                    },
+                    items: [
+                        {
+                            label: 'Manage Feedback',
+                            url: '/manage-feedback',
+                            check: (user: any) => {
+                                const checkComm = intersection(COMPANY_USER_MENU, get(user, 'permissions', []));
+                                if (!get(user, 'isSuperAdmin') && checkComm.length > 0) {
+                                    return true;
+                                }
+                                return false;
+                            },
+                            command: handleMenuClick
+                        },
+                        {
+                            label: 'Create New Rules',
+                            url: '/add-feedback',
+                            check: (user: any) => {
+                                const checkComm = intersection(COMPANY_USER_MENU, get(user, 'permissions', []));
+                                if (!get(user, 'isSuperAdmin') && checkComm.length > 0) {
+                                    return true;
+                                }
+                                return false;
+                            },
+                            command: handleMenuClick
+                        }
+                    ]
+                },
+                {
+                    label: 'My Permissions',
+                    icon: 'pi pi-lock-open',
+                    url: '/permissions',
+                    check: (user: any) => {
+                        const checkComm = intersection(COMPANY_MENU, get(user, 'permissions', []));
+                        if (checkComm.length > 0) {
+                            return true;
+                        }
+                        return false;
+                    },
+                    command: handleMenuClick
                 }
             ]
         }
@@ -418,35 +350,27 @@ const AppMenu = () => {
         <MenuProvider>
             {layoutState.isMobile && (
                 <Link to="/" className="layout-topbar-logo">
-                    <img src={getCompanyLogo(user?.company?.logo)} width="100px" height={'35px'} alt="logo" className={layoutState.isMobile ? 'mobile-sidebar-logo-img' : ''} style={{ marginTop: 15 }} />
+                    {/* <img src={getCompanyLogo(user?.company?.logo)} width="100px" height={'35px'} alt="logo" className={layoutState.isMobile ? 'mobile-sidebar-logo-img' : ''} style={{ marginTop: 15 }} /> */}
                 </Link>
             )}
 
             <div className="min-h-screen flex relative lg:static">
                 <div id="app-sidebar-2" className="h-screen block flex-shrink-0 absolute lg:static left-0 top-0 z-1 select-none" style={{ width: !layoutState.isMobile && layoutState.staticMenuDesktopInactive ? 60 : 250 }}>
                     <div className="flex flex-column" style={{ height: '92%' }}>
-                        <div className="overflow-y-auto">
+                        <div
+                            className="overflow-y-auto "
+                            style={{
+                                scrollbarWidth: 'thin' /* Firefox */,
+                                scrollbarColor: '#888 #f1f1f1' /* Firefox: thumb and track colors */
+                            }}
+                        >
                             <ul className="list-none p-3 m-0">
                                 {get(model, '0.items', []).map((item, i) => {
-                                    if (!item) return null;
-                                    if (item?.seperator) {
-                                        return (
-                                            <li key={`AppMenuitem${i}${item.label}`} className="menu-separator"></li>
-                                        );
-                                    }
-
-                                    return (
-                                        <AppMenuitem
-                                            item={item}
-                                            root={true}
-                                            index={i}
-                                            key={`AppMenuitem${i}${item.label}`}
-                                        />
-                                    );
+                                    return !item?.seperator ? <AppMenuitem item={item} root={true} index={i} key={`AppMenuitem${i}${item.label}`} /> : <li key={`AppMenuitem${i}${item.label}`} className="menu-separator"></li>;
                                 })}
                             </ul>
                         </div>
-                        {!layoutState.isMobile && (
+                        {/* {!layoutState.isMobile && (
                             <div className="mt-auto">
                                 <a
                                     v-ripple="true"
@@ -457,7 +381,7 @@ const AppMenu = () => {
                                     <i className={iconClass}></i>
                                 </a>
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </div>
             </div>
